@@ -1,0 +1,86 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FILE         : ChatterDoc.tex
+% AUTHOR       : (C) Copyright 2004 by Peter C. Chapin
+% LAST REVISED : 2004-04-29
+% SUBJECT      : Chatter
+%
+% This document describes the Chatter instant messaging system. This
+% system is based on CORBA and intended to serve as a vehicle for
+% learning and exploring CORBA. It is also intended to be useful for its
+% own sake as well. This document, like the Chatter system, is an
+% ongoing effort.
+%
+% Chatter is used to introduce CORBA to my students at Vermont Techincal
+% College.
+%
+% Send comments to Peter Chapin (pchapin@ecet.vtc.edu) or at the snail mail
+% address of:
+%
+%       Peter C. Chapin
+%       Vermont Technical College
+%       Main Street
+%       Randolph Center, VT. 05061
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ++++++++++++++++++++++++++++++++
+% Preamble and global declarations
+% ++++++++++++++++++++++++++++++++
+\documentclass{article}
+% \pagestyle{headings}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1.75ex plus0.5ex minus0.5ex}
+
+\newcommand{\Chatter}{\texttt{Chatter}}
+
+% +++++++++++++++++++
+% The document itself
+% +++++++++++++++++++
+\begin{document}
+
+% ----------------------
+% Title page information
+% ----------------------
+\title{Chatter Documentation}
+\author{\copyright\ Copyright 2006 by Peter C. Chapin}
+\date{Last Revised: March 29, 2006}
+\maketitle
+
+\section*{Introduction}
+
+\Chatter\ is a simple but flexible instant messaging system based on CORBA. The Chatter protocol is defined by a (currently) small collection of CORBA interfaces. Objects implementing these interfaces can interact in many potentially useful and interesting ways.
+
+Because \Chatter\ is quite general, many applications besides simple instant messaging are possible. For example, objects that monitor a device could send messages to objects that maintain a log file. Chat room objects could be created that accept messages and forward them to other objects (including loggers as well as ordinary human participants). Special filter objects could be created that remove or modify some of the messages that pass through them. Such filters could potentially offer services such as compression, encryption, or character set conversions to name a few possibilities.
+
+Currently \Chatter\ is implemented as a library of classes supporting some of the options mentioned above. Because the system is so flexible, there is no, single \Chatter\ application. In the future it is my hope that several sample applications, some non-trivial, will be included with this distribution.
+
+Note that \Chatter\ assumes that the CORBA naming service is available. \Chatter\ objects can register themselves with the naming service and the object names can then be used to locate the objects on the network. Some kind of \Chatter\ naming convention or namespace should probably be created eventually. For now, simple namings appearing in the root context of the naming service should be sufficient.
+
+\Chatter\ was developed using MICO\footnote{v2.3.11} on Windows with Visual C++\footnote{v7.1}, and using ORBacus\footnote{v4.1.2} with g++\footnote{v3.2.2}. It is likely, indeed it is hoped, that \Chatter\ will work with other ORBs and other C++ compilers.
+
+\section{Design}
+
+The file \texttt{chatter.idl} in the top level directory of the \Chatter\ source tree contains the interface definitions of the various \Chatter\ objects. Consult that file for specific documentation on those interfaces.
+
+\textit{A more extensive discussion of the design will hopefully appear in a later version of this document.}
+
+\section{Implementation}
+
+\textit{This section is intended to contain information about the implementation of the \Chatter\ library and its demonstration applications. This section is in major need of enhancement.}
+
+When you run your application you'll need to specify the address of the naming service or you will get exceptions when your programs attempt to resolve the initial references. Exactly how this is done is vendor dependent.
+
+\begin{enumerate}
+\item \emph{MICO}. Use a command line option such as
+
+\centerline{\texttt{-ORBNamingAddr inet:vortex.ecet.vtc.edu:43210}}
+
+\item \emph{ORBacus}. Use a command line option such as
+
+\centerline{\texttt{-ORBnaming
+    corbaloc::vortex.ecet.vtc.edu:43210/NameService}}
+
+\end{enumerate}
+
+When the ORB initializes itself it stores the information provided by these command line options and then removes the options from the command line.
+
+\end{document}

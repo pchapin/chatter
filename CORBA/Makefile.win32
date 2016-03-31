@@ -1,0 +1,14 @@
+############################################################################
+# FILE        : Makefile.win32
+# LAST REVISED: 2004-04-29
+# AUTHOR      : Peter C. Chapin
+#
+# This is the makefile for the top level Chatter directory. Right now it
+# only builds the documentation. This file was designed for use with
+# Microsoft's nmake.
+############################################################################
+
+all:    ChatterDoc.pdf
+
+ChatterDoc.pdf: ChatterDoc.tex
+        pdflatex ChatterDoc.tex

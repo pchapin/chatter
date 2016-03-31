@@ -1,0 +1,96 @@
+############################################################################
+# FILE        : Makefile.win32
+# LAST REVISED: 2004-04-28
+# AUTHOR      : Peter C. Chapin
+#
+# This is the makefile for the Chatter library. Chatter is a simple
+# instant messaging system built on CORBA. See ChatterDoc in the top
+# level directory for more information.
+############################################################################
+
+# Macro definitions
+# =====
+MICOSRCDIR = c:\lib\mico
+
+!include $(MICOSRCDIR)\MakeVars.win32
+
+IDLINCLUDE = $(MICOSRCDIR)\include\coss
+CXXFLAGS = $(CXXFLAGS) /D_WINDOWS \
+	/I$(MICOSRCDIR)\include /I$(MICOSRCDIR)\include\windows
+OBJS = chatter.obj chatter_skel.obj CosNaming.obj \
+     ChatDisplay.obj ChatLogger.obj ChatRoom.obj TextSink.obj
+
+all:		chatter.lib
+
+
+# The following dependencies are for the output of the IDL compiler.
+# =====
+chatter.h:	..\chatter.idl
+	$(MICOSRCDIR)$(IDL) -I$(IDLINCLUDE) --c++-suffix=cpp --c++-skel \
+	..\chatter.idl
+
+chatter.cpp:	..\chatter.idl
+	$(MICOSRCDIR)$(IDL) -I$(IDLINCLUDE) --c++-suffix=cpp --c++-skel \
+	..\chatter.idl
+
+chatter_skel.cpp:	..\chatter.idl
+	$(MICOSRCDIR)$(IDL) -I$(IDLINCLUDE) --c++-suffix=cpp --c++-skel \
+	..\chatter.idl
+
+CosNaming.h:	$(IDLINCLUDE)\CosNaming.idl
+	$(MICOSRCDIR)$(IDL) --c++-suffix=cpp $(IDLINCLUDE)\CosNaming.idl
+
+CosNaming.cpp:	$(IDLINCLUDE)\CosNaming.idl
+	$(MICOSRCDIR)$(IDL) --c++-suffix=cpp $(IDLINCLUDE)\CosNaming.idl
+
+
+# The following dependencies force the compilation of the IDL output.
+# =====
+chatter.obj:		chatter.cpp chatter.h
+chatter_skel.obj:	chatter_skel.cpp chatter.h
+CosNaming.obj:		CosNaming.cpp CosNaming.h
+
+
+# The following dependencies describe the chatter library object files.
+# =====
+ChatDisplay.obj: ChatDisplay.cpp ChatDisplay.h TextSink.h chatter.h CosNaming.h
+ChatLogger.obj:	 ChatLogger.cpp ChatLogger.h TextSink.h chatter.h CosNaming.h
+ChatRoom.obj:    ChatRoom.cpp ChatRoom.h TextSink.h chatter.h CosNaming.h
+TextSink.obj:    TextSink.cpp TextSink.h chatter.h CosNaming.h
+
+
+# The library build command
+# =====
+chatter.lib:	$(OBJS)
+	lib /out:chatter.lib $(OBJS)
+
+
+# Client and Server builds need revision. Old commands for future reference.
+# =====
+#client.obj:	client.cpp chatter.h CosNaming.h
+#
+#server.obj:	server.cpp chatter.h CosNaming.h
+#
+#client.exe:	client.obj chatter.obj CosNaming.obj
+#	$(LINK) $(LINKFLAGS) /out:client.exe \
+#	        client.obj chatter.obj CosNaming.obj \
+#	        $(MICOSRCDIR)\win32-bin\lib\mico$(VERSION).lib
+#
+#server.exe:	server.obj chatter.obj chatter_skel.obj CosNaming.obj
+#	$(LINK) $(LINKFLAGS) /out:server.exe \
+#	        server.obj chatter.obj chatter_skel.obj CosNaming.obj \
+#	        $(MICOSRCDIR)\win32-bin\lib\mico$(VERSION).lib
+
+
+# Various utility targets
+# =====
+clean:
+	del *.ilk
+	del *.pdb
+	del *.obj
+	del *.exe
+	del chatter.h
+	del chatter.cpp
+	del chatter_skel.cpp
+	del CosNaming.h
+	del CosNaming.cpp

@@ -1,0 +1,30 @@
+############################################################################
+# FILE  : Makefile.win32
+# AUTHOR: Copyright (C) 2012 by Peter C. Chapin
+#
+# This is the makefile for roomserver application in the Chatter system.
+############################################################################
+
+ICE_LIBS     = "$(ICE_HOME)\lib\ice.lib" "$(ICE_HOME)\lib\iceutil.lib"
+CHATTER_LIBD = ..\..\lib
+CHATTER_LIB  = $(CHATTER_LIBD)\Chatter.lib
+CPPFLAGS     = /nologo /EHsc /MD /I. /I$(CHATTER_LIBD) "/I$(ICE_HOME)\include"
+
+all:            roomserver.exe
+
+roomserver.exe: roomserver.obj $(CHATTER_LIB)
+                link /NOLOGO roomserver.obj $(ICE_LIBS) $(CHATTER_LIB)
+
+# Object file dependencies
+##########################
+
+roomserver.obj: roomserver.cpp $(CHATTER_LIBD)\Chatter.h \
+                $(CHATTER_LIBD)\NameService.h \
+                $(CHATTER_LIBD)\RoomManager.h \
+
+# Utility Targets
+#################
+
+clean:
+                del *.obj
+                del *.exe

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Chatter.iml" filepath="$PROJECT_DIR$/Chatter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/programs/Client/Client.iml" filepath="$PROJECT_DIR$/programs/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/programs/NameServer/NameServer.iml" filepath="$PROJECT_DIR$/programs/NameServer/NameServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/programs/RoomServer/RoomServer.iml" filepath="$PROJECT_DIR$/programs/RoomServer/RoomServer.iml" />
+    </modules>
+  </component>
+</project>
+

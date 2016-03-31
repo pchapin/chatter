@@ -1,0 +1,226 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FILE   : ChatterDoc.tex
+% AUTHOR : (C) Copyright 2013 by Peter C. Chapin
+% SUBJECT: Chatter
+%
+% This document describes the Chatter instant messaging system. This system is based on
+% middleware and intended to serve as a vehicle for learning and exploring middleware
+% technologies. It is also intended to be useful for its own sake as well.
+%
+%       Peter C. Chapin
+%       Computer Information Systems
+%       Vermont Technical College
+%       Williston, VT. 05495
+%       PChapin@vtc.vsc.edu
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ++++++++++++++++++++++++++++++++
+% Preamble and global declarations
+% ++++++++++++++++++++++++++++++++
+\documentclass[twocolumn]{article}
+%\pagestyle{headings}
+%\setlength{\parindent}{0em}
+%\setlength{\parskip}{1.75ex plus0.5ex minus0.5ex}
+
+% Eventually a separate macro file might be desirable.
+\newcommand{\Chatter}{\texttt{Chatter}}
+
+% +++++++++++++++++++
+% The document itself
+% +++++++++++++++++++
+\begin{document}
+
+% ----------------------
+% Title page information
+% ----------------------
+\title{Chatter Documentation}
+\author{\copyright\ Copyright 2013 by Peter C. Chapin}
+\date{Last Revised: April 8, 2013}
+\maketitle
+
+\section*{Introduction}
+
+\Chatter\ is a simple but flexible instant messaging system based on middleware technology.
+Currently \Chatter\ is most mature in C++ on the Ice platform\footnote{\tt
+  http://www.zeroc.com/}. There also exists a rudimentary C++ CORBA implementation and a
+rudimentary Java Ice implementation. It is my hope that eventually \Chatter\ will be implemented
+in a variety of programming languages on a variety of middleware systems. In fact it is my
+primary intention for \Chatter\ to be an educational vehicle for exploring middleware.
+
+The \Chatter\ protocol is defined by a small collection of interfaces. Objects implementing
+these interfaces can interact in many potentially useful and interesting ways. Because \Chatter\
+is quite general, many applications besides instant messaging are possible. For example, objects
+that monitor a device could send messages to objects that maintain a log file. Chat room objects
+could accept messages and forward them to a collection of other objects. Special filter objects
+could be created that remove or modify some of the messages that pass through them. Such filters
+could potentially offer services such as compression, encryption, or character set conversions
+to name a few possibilities.
+
+Currently \Chatter\ is implemented as a library of classes supporting some of the options
+mentioned above. Because the system is so flexible there is no single \Chatter\ application.
+Instead several sample applications are also provided in this distribution.
+
+The code base is divided by middleware technology since the selection of a middleware platform
+tends to permeate the rest of the code. The Ice version of \Chatter\ supports C++ and Java so
+different folders are used for the two languages. I hope that in the future additional
+programming languages will be supported by \Chatter. It may be possible to arrange the system so
+that, for each programming language, a single code base supports multiple middleware platforms.
+However, such an organization might be difficult to create and maintain.
+
+In addition to providing a medium for experimenting with middleware platforms, I also hope that
+\Chatter\ will provide a good test bed for experimenting with distributed authorization systems.
+This is a reflection of my interest in distributed authorization in general. I imagine a
+\Chatter\ system where each user creates a policy specifying who can access the methods of their
+objects. With each method invocation appropriate credentials would be passed from client to
+server along with the method's arguments. A policy compliance checker on the server side of the
+connection would then verify that the client's credentials are sufficient to allow access.
+
+I feel that an instant messaging system would be a good test bed for practical distributed
+authorization solutions. Users may wish to control who can send them messages and the
+administrators of resources like loggers, chat room servers, and other entities may wish to
+control access to those resources in complex ways. Thus \Chatter\ should provide a rich and
+interesting environment for distributed authorization experiments.
+
+\section{Design}
+
+The file \texttt{Chatter.ice} in the top level directory of the \Chatter\ source tree contains
+the interface definitions of the various \Chatter\ objects. Consult that file for specific
+documentation on those interfaces.
+
+\textit{A more extensive discussion of the design will hopefully appear in a later version of
+  this document.}
+
+\section{Discussion}
+
+One interesting issue is related to cycles in the \Chatter\ network. One object might forward
+messages to a second object where they are in turn forwarded, directly or indirectly, back to
+the first. In this case messages would circulate around such a cycle infinitely unless special
+steps are taken to prevent them from doing so.
+
+% Should include a figure of the email message splitter described below.
+
+Cycles are not necessarily bad. In fact, they allow a basic looping structure in \Chatter\
+networks that can be used to perform useful computation. Imagine a Splitter object that accepts
+RFC-5822 formatted email messages and splits off the header of such messages. It might send the
+header to one destination and the body to another. Suppose that the object receiving the body
+checks for a header and, if it finds one (because the original message was a wrapper), sends the
+body back to the splitter. This network will cause a deeply nested message to loop, with its
+headers being split of repeatedly until the final, innermost body has been reached.
+
+Thus even if the \Chatter\ objects do not use loops or recursion, computations involving loops
+or recursion can be executed by a suitably configured network of such objects. Note that unlike
+an ordinary program (or an ordinary Turing Machine), a \Chatter\ network is subject to dynamic
+reconfiguration. As its ``program'' executes new control structures could come into being and
+old control structures could be dismantled. It is interesting to speculate on what effect this
+ability has on the computational abilities of a \Chatter\ network. Can this ability be used to
+design novel and useful algorithms for solving certain problems?
+
+\subsection{Removing Cycles}
+
+In an instant messaging application, cycles are undesirable. One way to remove them would be to
+stamp each message with a unique ID number when that message is freshly generated (that is, not
+in response to an incoming message). Messages passed between \Chatter\ nodes would then be a
+structure containing the text of the message and the ID number. When a message is filtered, the
+output message gets the same ID number as the corresponding incoming message. Objects that
+accept messages would have to keep track of what ID numbers they have seen and ignore messages
+that are duplicates.
+
+There are several problems with this scheme:
+
+\begin{enumerate}
+
+\item How are the ID numbers generated? They must be globally unique yet objects that introduce
+  fresh messages onto the network are not aware of each other and can't synchronize.
+
+\item How many IDs should an object track? Should the number be a count of different IDs seen so
+  far, or based on a certain time interval? If an object remembers too few IDs, cycles with a
+  long cycle time won't be broken. However, it is a resource burden to remember a large number
+  of IDs.
+
+\item If an incoming message produces several outgoing messages, should any or all of the
+  outgoing messages be considered fresh? How does one decide?
+
+\end{enumerate}
+
+Another approach would be to give every \emph{object} a globally unique ID and then attach to
+each message a list of objects through which the message has passed. When a message is received,
+the receiving object scans the list looking for its ID and ignores the message if it is found.
+
+This approach means that the objects don't have to worry about managing a database of messages
+they have seen and don't have to apply an arbitrary limit to the size of that database. Thus
+objects are more lightweight than they would be in the earlier system.
+
+Several problems remain:
+
+\begin{enumerate}
+
+\item We still need to generate globally unique IDs (although probably not as many since in most
+  cases there should be fewer objects than messages).
+
+\item Message overhead is greater. This might be a serious problem if messages typically go
+  through many objects.
+
+\item Questions remain regarding the handling of multiple outgoing messages. Do all of the
+  outgoing messages get the entire ID list attached to the corresponding incoming message?
+
+\end{enumerate}
+
+The second approach for cycle-breaking would be best in an environment where the network is
+quite fast and the nodes have limited resources. The first approach would be better in exactly
+the opposite situation.
+
+\section{Building \Chatter}
+
+This section describes how to build and install \Chatter\ starting with the source distribution.
+
+\subsection{Ice with C++}
+
+If you are interested in building \Chatter\ for Ice you must first have the Ice headers,
+libraries, and support applications installed. Both Linux and Windows are supported build
+platforms.
+
+Download Ice from ZeroC and install it according to the instructions contained in the Ice
+distribution. Before building \Chatter\ you will need to define an \texttt{ICE\_HOME}
+environment variable that points at the top level folder or directory where the Ice system is
+installed. The \Chatter\ Makefiles use this environment variable to locate the Ice headers and
+libraries. In addition you should add the Ice binary folder or directory to your \texttt{PATH}
+environment variable. The \Chatter\ Makefiles need access to Ice tools such as
+\texttt{slice2cpp} during the build.
+
+\subsection{Ice with Java}
+
+The Java version of \Chatter\ is build with IntelliJ IDEA. After downloading and installing Ice
+according to the instructions contained in the Ice distribution you must then use
+\texttt{slice2java} to create the necessary stubs and skeletons. Execute \texttt{slice2java} in
+the \texttt{src} folder under \texttt{Ice/Java}. You will need to provide a relative path to the
+common \texttt{Chatter.ice} file that is shared with the C++ code base.
+
+After building the stubs and skeletons you can then load the IntelliJ project from
+\texttt{Ice/Java} and build the system in the usual way.
+
+\section{\Chatter\ for Developers}
+
+\textit{This section is intended for developers who wish to extend \Chatter\ interfaces to
+  create new objects that can participate in a \Chatter\ network or who wish to enhance the
+  existing Chatter system. It provides information about how to program \Chatter.}
+
+\subsection{Ice}
+
+At the moment the \Chatter\ interfaces are only documented in \texttt{Chatter.ice} and any slice
+specifications included by \texttt{Chatter.ice}. Please read the comments in the slice files for
+information about each interface.
+
+Ideas for enhancements to the existing \Chatter\ system are included in comments in the various
+source files. Please refer to the source code for more information.
+
+\section{\Chatter\ for Users}
+
+\textit{This section is intended for users of the system (non-programmers). It provides
+  information about how to set up and run the demonstration applications.}
+
+When you run your application you'll need to specify the address of the naming service or you
+will get exceptions when your programs attempt to resolve the initial references. Exactly how
+this is done is vendor dependent.
+
+\end{document}
+

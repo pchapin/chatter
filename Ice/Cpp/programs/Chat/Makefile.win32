@@ -1,0 +1,38 @@
+############################################################################
+# FILE  : Makefile.win32
+# AUTHOR: Copyright (C) 2012 by Peter C. Chapin
+#
+# This is the makefile for Chat application in the Chatter system. This
+# program is a basic, interactive instant messaging program.
+############################################################################
+
+ICE_LIBS     = "$(ICE_HOME)\lib\ice.lib" "$(ICE_HOME)\lib\iceutil.lib"
+CHATTER_LIBD = ..\..\lib
+CHATTER_LIB  = $(CHATTER_LIBD)\Chatter.lib
+CPPFLAGS     = /nologo /EHsc /MD /I. /I$(CHATTER_LIBD) "/I$(ICE_HOME)\include"
+
+all:            client.exe server.exe
+
+server.exe:     server.obj $(CHATTER_LIB)
+                link /NOLOGO server.obj $(ICE_LIBS) $(CHATTER_LIB)
+
+client.exe:     client.obj $(CHATTER_LIB)
+                link /NOLOGO client.obj $(ICE_LIBS) $(CHATTER_LIB)
+
+# Object file dependencies
+##########################
+
+server.obj:     server.cpp $(CHATTER_LIBD)\Chatter.h \
+                $(CHATTER_LIBD)\NameService.h \
+                $(CHATTER_LIBD)\ChatDisplay.h \
+                $(CHATTER_LIBD)\TextSink.h \
+
+client.obj:     client.cpp $(CHATTER_LIBD)\Chatter.h \
+                $(CHATTER_LIBD)\NameService.h
+
+# Utility Targets
+#################
+
+clean:
+                del *.obj
+                del *.exe

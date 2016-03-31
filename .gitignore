@@ -1,0 +1,19 @@
+# Documentation artifacts.
+doc/ChatterDoc.aux
+doc/ChatterDoc.log
+doc/ChatterDoc.pdf
+
+# Java build artifacts.
+Ice/Java/.idea/workspace.xml
+Ice/Java/build
+Ice/Java/src/chatter
+
+# C++ build artifacts.
+*.o
+Chatter.cpp
+Chatter.h
+Ice/Cpp/lib/Chatter.a
+Ice/Cpp/programs/Chat/client
+Ice/Cpp/programs/Chat/server
+Ice/Cpp/programs/nameserver/nameserver
+Ice/Cpp/programs/roomserver/roomserver

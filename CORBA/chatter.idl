@@ -1,0 +1,75 @@
+/****************************************************************************
+FILE          : chatter.idl
+LAST REVISION : 2004-04-20
+SUBJECT       : Interface to Chatter objects
+PROGRAMMER    : (C) Copyright 2004 by Peter C. Chapin
+
+Please send comments or bug reports to
+
+     Peter C. Chapin
+     Vermont Technical College
+     Randolph Center, VT 05061
+     pchapin@ecet.vtc.edu
+****************************************************************************/
+
+#include <CosNaming.idl>
+
+module Chatter {
+
+  // TextSink objects accept lines of text and process them in some way.
+  interface TextSink {
+
+    // Send a line of text. The line should not be '\n' terminated. The
+    // 'from' string specifies the entity that sent the line. The name
+    // given should not be trusted as there is currently no provision
+    // for security.
+    //
+    void put_line(in string from, in string line);
+
+    // Register a name for this object with the naming service.
+    void reg(in CosNaming::NamingContext nc, in string nm);
+
+    // Remove a previously registered name.
+    void unreg();
+
+    // Inform object that no more text will be coming.
+    void eot();
+
+    // Return true if object accepting text normally.
+    boolean is_enabled();
+  };
+
+
+  // TextSource objects produce lines of text. They can be pointed at dests.
+  interface TextSource {
+
+    // Point this source at the specified sink.
+    void set_destination_ref(in TextSink dest);
+
+    // Point this source at the named sink. Use nc to look up reference.
+    void set_destination_name(in CosNaming::NamingContext nc, in string nm);
+  };
+
+
+  // TextFilter objects can play the role of both a sink and a source.
+  interface TextFilter : TextSink, TextSource {
+  };
+
+
+  // =====
+  // Interfaces derived from above.
+  // =====
+
+  // ChatRoom objects can be pointed at many destinations. Each line
+  // they accept is forwarded to all of their destinations.
+  //
+  interface ChatRoom : TextSink {
+
+    // Add another destination to this room. All text sent to the room
+    // is copied to all destinations. Currently there is no facility for
+    // removing destination.
+    //
+    void add(in TextSink dest);
+  };
+
+};

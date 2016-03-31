@@ -1,0 +1,30 @@
+############################################################################
+# FILE  : Makefile.win32
+# AUTHOR: Copyright (C) 2012 by Peter C. Chapin
+#
+# This is the makefile for nameserver application in the Chatter system.
+# This program is needed for resolving nicknames to object references.
+############################################################################
+
+ICE_LIBS     = "$(ICE_HOME)\lib\ice.lib" "$(ICE_HOME)\lib\iceutil.lib"
+CHATTER_LIBD = ..\..\lib
+CHATTER_LIB  = $(CHATTER_LIBD)\Chatter.lib
+CPPFLAGS     = /nologo /EHsc /MD /I. /I$(CHATTER_LIBD) "/I$(ICE_HOME)\include"
+
+all:            nameserver.exe
+
+nameserver.exe: nameserver.obj $(CHATTER_LIB)
+                link /NOLOGO nameserver.obj $(ICE_LIBS) $(CHATTER_LIB)
+
+# Object file dependencies
+##########################
+
+nameserver.obj: nameserver.cpp \
+                $(CHATTER_LIBD)\Chatter.h $(CHATTER_LIBD)\NameService.h
+
+# Utility Targets
+#################
+
+clean:
+                del *.obj
+                del *.exe

@@ -1,0 +1,31 @@
+############################################################################
+# FILE        : Makefile.win32
+# LAST REVISED: 2007-04-26
+# AUTHOR      : Copyright (C) 2007 by Peter C. Chapin
+#
+# This is the master makefile for the Chatter system.
+############################################################################
+
+NMAKEFLAGS = /NOLOGO /f Makefile.win32
+
+all:
+        cd lib
+        nmake $(NMAKEFLAGS)
+        cd ..\programs\nameserver
+        nmake $(NMAKEFLAGS)
+        cd ..\..\programs\roomserver
+        nmake $(NMAKEFLAGS)
+        cd ..\..\programs\Chat
+        nmake $(NMAKEFLAGS)
+        cd ..\..
+
+clean:
+        cd lib
+        nmake $(NMAKEFLAGS) clean
+        cd ..\programs\nameserver
+        nmake $(NMAKEFLAGS) clean
+        cd ..\..\programs/roomserver
+        nmake $(NMAKEFLAGS) clean
+        cd ..\..\programs/Chat
+        nmake $(NMAKEFLAGS) clean
+        cd ..\..
