@@ -1,7 +1,7 @@
 /****************************************************************************
 FILE      : Chatter.ice
 SUBJECT   : Interface to Chatter objects
-PROGRAMMER: (C) Copyright 2014 by Peter C. Chapin
+PROGRAMMER: (C) Copyright 2018 by Peter C. Chapin
 
 Please send comments or bug reports to
 
@@ -9,7 +9,7 @@ Please send comments or bug reports to
      Computer Information Systems
      Vermont Technical College
      Williston, VT 05495
-     PChapin@vtc.vsc.edu
+     pchapin@vtc.edu
 ****************************************************************************/
 
 module chatter {

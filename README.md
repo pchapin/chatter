@@ -27,10 +27,13 @@ Future Directions
 
 + Attempt to merge the CORBA and Ice code bases to create a single set of sources that can be
   compiled for either CORBA or Ice operation. (It is unclear if this would actually be a good
-  idea or now).
+  idea or not).
 
 + Create a CORBA/Ice gateway so that the two Chatter implementations could interoperate.
 
 + Create implemenations in other languages (Java? C#?)
 
 + Create implementations for other middleware technologies (.NET? Web Services?)
+
+Peter Chapin  
+chapinp@acm.org
