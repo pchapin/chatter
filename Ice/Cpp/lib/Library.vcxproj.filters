@@ -33,6 +33,9 @@
     <ClCompile Include="TextSink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chatter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChatDisplay.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextSink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chatter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

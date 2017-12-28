@@ -23,6 +23,7 @@
     <ClCompile Include="ChatDisplay.cpp" />
     <ClCompile Include="ChatLogger.cpp" />
     <ClCompile Include="ChatRoom.cpp" />
+    <ClCompile Include="Chatter.cpp" />
     <ClCompile Include="NameService.cpp" />
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="TextSink.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="ChatDisplay.h" />
     <ClInclude Include="ChatLogger.h" />
     <ClInclude Include="ChatRoom.h" />
+    <ClInclude Include="Chatter.h" />
     <ClInclude Include="NameService.h" />
     <ClInclude Include="RoomManager.h" />
     <ClInclude Include="TextSink.h" />
