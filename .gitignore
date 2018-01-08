@@ -12,6 +12,9 @@ Ice/Java/src/chatter
 *.o
 Chatter.cpp
 Chatter.h
+Ice/Cpp/.vs
+Ice/Cpp/lib/x64
+Ice/Cpp/packages
 Ice/Cpp/lib/Chatter.a
 Ice/Cpp/programs/Chat/client
 Ice/Cpp/programs/Chat/server
