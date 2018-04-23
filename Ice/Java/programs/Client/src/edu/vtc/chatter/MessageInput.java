@@ -1,9 +1,10 @@
 package edu.vtc.chatter;
 
+import com.zeroc.Ice.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.Exception;
 
-import Ice.Communicator;
 import chatter.*;
 
 /**
@@ -92,9 +93,9 @@ public class MessageInput extends Thread {
 
                         case "/select":
                             // TODO: Obtain host and port information from the command arguments.
-                            Ice.ObjectPrx rawRoomManager =
+                            ObjectPrx rawRoomManager =
                                     ic.stringToProxy("RoomManager:tcp -h localhost -p 9101");
-                            rm = RoomManagerPrxHelper.checkedCast(rawRoomManager);
+                            rm = RoomManagerPrx.checkedCast(rawRoomManager);
                             break;
 
                         case "/quit":

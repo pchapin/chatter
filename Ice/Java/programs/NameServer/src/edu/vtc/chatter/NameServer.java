@@ -1,5 +1,8 @@
 package edu.vtc.chatter;
 
+import com.zeroc.Ice.*;
+import java.lang.Exception;
+
 /**
  * The main class of the Chatter name server program.
  */
@@ -14,17 +17,17 @@ public class NameServer {
     public static void main(String[] args)
     {
         int status = 0;
-        Ice.Communicator ic = null;
+        Communicator ic = null;
         try {
-            ic = Ice.Util.initialize(args);
-            Ice.ObjectAdapter adapter =
+            ic = Util.initialize(args);
+            ObjectAdapter adapter =
                     ic.createObjectAdapterWithEndpoints("NameServerAdapter", "default -p 9100");
-            Ice.Object object = new NameServiceI();
-            adapter.add(object, ic.stringToIdentity("NameService"));
+            NameServiceI object = new NameServiceI();
+            adapter.add(object, Util.stringToIdentity("NameService"));
             adapter.activate();
             ic.waitForShutdown();
         }
-        catch (Ice.LocalException e) {
+        catch (LocalException e) {
             e.printStackTrace();
             status = 1;
         }

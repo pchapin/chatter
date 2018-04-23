@@ -1,5 +1,6 @@
 package edu.vtc.chatter;
 
+import com.zeroc.Ice.*;
 import java.util.HashMap;
 import chatter.*;
 
@@ -8,7 +9,7 @@ import chatter.*;
  * the name server. This implementation is simple in that it stores name to object mappings in
  * memory using a Java collections HashMap.
  */
-public class NameServiceI extends _NameServiceDisp {
+public class NameServiceI implements NameService {
 
     HashMap<String, TextSinkPrx> objectMap = new HashMap<>();
 
@@ -48,7 +49,7 @@ public class NameServiceI extends _NameServiceDisp {
 
     @Override
     public String registerName(
-            String name, TextSinkPrx instance, Ice.Current current) throws BadNameException
+            String name, TextSinkPrx instance, Current current) throws BadNameException
     {
         String cleanedName = cleanName(name);
         System.out.println("Adding   name: " + cleanedName);
@@ -58,7 +59,7 @@ public class NameServiceI extends _NameServiceDisp {
 
 
     @Override
-    public void unregisterName(String name, Ice.Current current)
+    public void unregisterName(String name, Current current)
     {
         System.out.println("Removing name: " + name);
         objectMap.remove(name);
@@ -66,7 +67,7 @@ public class NameServiceI extends _NameServiceDisp {
 
 
     @Override
-    public TextSinkPrx lookupName(String name, Ice.Current current)
+    public TextSinkPrx lookupName(String name, Current current)
     {
         return objectMap.get(name);
     }

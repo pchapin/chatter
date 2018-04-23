@@ -1,5 +1,7 @@
 package edu.vtc.chatter;
 
+import com.zeroc.Ice.*;
+import java.lang.Exception;
 import chatter.*;
 
 /**
@@ -19,9 +21,9 @@ public class Client {
         String nickname = "GoldenEye";
         String port = "9111";
 
-        Ice.Communicator ic = null;
+        Communicator ic = null;
         try {
-            ic = Ice.Util.initialize(args);
+            ic = Util.initialize(args);
 
             if (args.length != 2) {
                 System.out.println("Usage: Client nickname listening-port");
@@ -33,21 +35,21 @@ public class Client {
                 port     = args[1];
             }
 
-            Ice.ObjectAdapter adapter =
+            ObjectAdapter adapter =
                     ic.createObjectAdapterWithEndpoints("ClientAdapter", "default -p " + port);
 
             // Create and add a servant to deal with incoming messages.
             MessageDisplay displayObject = new MessageDisplay();
-            Ice.ObjectPrx displayObjectProxy =
-                    adapter.add(displayObject, ic.stringToIdentity("MessageDisplay"));
-            TextSinkPrx displayProxy = TextSinkPrxHelper.checkedCast(displayObjectProxy);
+            ObjectPrx displayObjectProxy =
+                    adapter.add(displayObject, Util.stringToIdentity("MessageDisplay"));
+            TextSinkPrx displayProxy = TextSinkPrx.checkedCast(displayObjectProxy);
             adapter.activate();
 
             // Get a proxy to the "well known" name service.
             // TODO: The location of the name service should be configurable.
-            Ice.ObjectPrx rawNameService =
+            ObjectPrx rawNameService =
                     ic.stringToProxy("NameService:tcp -h localhost -p 9100");
-            NameServicePrx ns = NameServicePrxHelper.checkedCast(rawNameService);
+            NameServicePrx ns = NameServicePrx.checkedCast(rawNameService);
 
             // TODO: Use a better exception. This is an abuse of IllegalArgumentException.
             if (ns == null) throw new IllegalArgumentException("Invalid Name Service");
@@ -61,7 +63,7 @@ public class Client {
 
             ic.waitForShutdown();
         }
-        catch (Ice.LocalException e) {
+        catch (LocalException e) {
             e.printStackTrace();
             status = 1;
         }

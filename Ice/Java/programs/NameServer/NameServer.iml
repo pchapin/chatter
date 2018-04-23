@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Chatter" />
+    <orderEntry type="library" name="ice-3.7.0" level="project" />
   </component>
 </module>
