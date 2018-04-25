@@ -9,6 +9,8 @@ import chatter.*;
  */
 public class RoomManagerI implements RoomManager {
 
+    // We need a map (Map<String, ChatRoomPrx>) that maps the name of a chat room to its proxy.
+
     @Override
     public String[] listRooms(Current current)
     {
@@ -19,7 +21,7 @@ public class RoomManagerI implements RoomManager {
     @Override
     public void createRoom(String name, Current current)
     {
-
+        // Create a new ChatRoom object and "connect" it to the object adaptor.
     }
 
 
