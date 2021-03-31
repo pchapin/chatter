@@ -30,7 +30,7 @@ public class Client {
                 System.exit(1);  // This seems a bit abrupt.
             }
             else {
-                // TODO: Add some input verification.
+                // TODO: Add some input validation.
                 nickname = args[0];
                 port     = args[1];
             }
