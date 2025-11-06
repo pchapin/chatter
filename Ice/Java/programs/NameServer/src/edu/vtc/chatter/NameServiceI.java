@@ -6,7 +6,7 @@ import chatter.*;
 
 /**
  * Implementation of the Chatter NameService interface. This class does the bulk of the work of
- * the name server. This implementation is simple in that it stores name to object mappings in
+ * the name server. This implementation is simple in that it stores name-to-object mappings in
  * memory using a Java collections HashMap.
  */
 public class NameServiceI implements NameService {

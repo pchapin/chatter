@@ -52,7 +52,7 @@ public class MessageInput extends Thread {
                 line = consoleInput.readLine();
                 if (line == null) break;
 
-                if (line.length() == 0 || line.charAt(0) != '/') {
+                if (line.isEmpty() || line.charAt(0) != '/') {
                     // We are processing text intended for the receiver.
                     if (currentReceiver != null)
                         currentReceiver.putLine(nickName, line);
